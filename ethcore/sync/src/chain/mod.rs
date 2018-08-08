@@ -741,19 +741,19 @@ impl ChainSync {
 						return;
 					}
 
-					let have_latest = io.chain().block_status(BlockId::Hash(peer_latest)) != BlockStatus::Unknown;
-					trace!(target: "sync", "Considering peer {}, force={}, td={:?}, our td={}, latest={}, have_latest={}, state={:?}", peer_id, force, peer_difficulty, syncing_difficulty, peer_latest, have_latest, self.state);
-					if !have_latest && (higher_difficulty || force || self.state == SyncState::NewBlocks) {
-						// check if got new blocks to download
-						trace!(target: "sync", "Syncing with peer {}, force={}, td={:?}, our td={}, state={:?}", peer_id, force, peer_difficulty, syncing_difficulty, self.state);
-						if let Some(request) = self.new_blocks.request_blocks(io, num_active_peers) {
-							SyncRequester::request_blocks(self, io, peer_id, request, BlockSet::NewBlocks);
-							if self.state == SyncState::Idle {
-								self.state = SyncState::Blocks;
-							}
-							return;
-						}
-					}
+//					let have_latest = io.chain().block_status(BlockId::Hash(peer_latest)) != BlockStatus::Unknown;
+//					trace!(target: "sync", "Considering peer {}, force={}, td={:?}, our td={}, latest={}, have_latest={}, state={:?}", peer_id, force, peer_difficulty, syncing_difficulty, peer_latest, have_latest, self.state);
+//					if !have_latest && (higher_difficulty || force || self.state == SyncState::NewBlocks) {
+//						// check if got new blocks to download
+//						trace!(target: "sync", "Syncing with peer {}, force={}, td={:?}, our td={}, state={:?}", peer_id, force, peer_difficulty, syncing_difficulty, self.state);
+//						if let Some(request) = self.new_blocks.request_blocks(io, num_active_peers) {
+//							SyncRequester::request_blocks(self, io, peer_id, request, BlockSet::NewBlocks);
+//							if self.state == SyncState::Idle {
+//								self.state = SyncState::Blocks;
+//							}
+//							return;
+//						}
+//					}
 
 					// Only ask for old blocks if the peer has a higher difficulty than the last imported old block
 					let last_imported_old_block_difficulty = self.old_blocks.as_mut().and_then(|d| {
