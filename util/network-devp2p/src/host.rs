@@ -471,7 +471,6 @@ impl Host {
 			let socket = UdpSocket::bind(&udp_addr).expect("Error binding UDP socket");
 			*self.udp_socket.lock() = Some(socket);
 
-			discovery.init_node_list(self.nodes.read().entries());
 			discovery.add_node_list(self.nodes.read().entries());
 			*self.discovery.lock() = Some(discovery);
 			io.register_stream(DISCOVERY)?;
@@ -1009,13 +1008,12 @@ impl IoHandler<NetworkIoMessage> for Host {
 			DISCOVERY_REFRESH => {
 				if let Some(d) = self.discovery.lock().as_mut() {
 					d.refresh();
-                                }
+				}
 				io.update_registration(DISCOVERY).unwrap_or_else(|e| debug!("Error updating discovery registration: {:?}", e));
 			},
 			DISCOVERY_ROUND => {
-				let node_changes = { self.discovery.lock().as_mut().and_then(|d| d.round()) };
-				if let Some(node_changes) = node_changes {
-					self.update_nodes(io, node_changes);
+				if let Some(d) = self.discovery.lock().as_mut() {
+					d.round();
 				}
 				io.update_registration(DISCOVERY).unwrap_or_else(|e| debug!("Error updating discovery registration: {:?}", e));
 			},
