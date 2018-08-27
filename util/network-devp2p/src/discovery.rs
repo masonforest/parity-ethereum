@@ -496,7 +496,6 @@ impl<'a> Discovery<'a> {
 		let timestamp: u64 = rlp.val_at(2)?;
 		self.check_timestamp(timestamp)?;
 
-		let mut empty = false;
 		let mut expected_node = match self.in_flight_pings.entry(*node_id) {
 			Entry::Occupied(entry) => {
 				let expected_node = {
@@ -526,13 +525,14 @@ impl<'a> Discovery<'a> {
 				expected_node
 			},
 			Entry::Vacant(_) => {
-				empty = true;
 				debug!(target: "discovery", "Got unexpected Pong from {:?} ; request not found", &from);
 				None
 			},
 		};
 
-		if empty && ::std::env::var("DISCOVERY_REPAIR").is_ok() {
+		// If the Node couldn't be found from its ID,
+		// Try to find it in from the hash that was sent back
+		if expected_node.is_none() {
 			self.in_flight_pings.retain(|_, ping_request| {
 				if ping_request.echo_hash == echo_hash || ping_request.deprecated_echo_hash == echo_hash {
 					debug!(target: "discovery",
