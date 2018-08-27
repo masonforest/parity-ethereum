@@ -706,7 +706,10 @@ impl<'a> Discovery<'a> {
 	}
 
 	pub fn refresh(&mut self) {
-		self.start();
+		// Only refresh when rounds are done
+		if self.discovery_round == DISCOVERY_MAX_STEPS || self.discovery_round == 0 {
+			self.start();
+		}
 	}
 
 	pub fn any_sends_queued(&self) -> bool {
