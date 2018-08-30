@@ -344,11 +344,13 @@ impl NodeTable {
 	/// Apply table changes coming from discovery
 	pub fn update(&mut self, mut update: TableUpdates, reserved: &HashSet<NodeId>) {
 		for (_, node) in update.added.drain() {
+			trace!(target: "network", "Adding entry 0x{:x} to NodeTable", node.id);
 			let entry = self.nodes.entry(node.id).or_insert_with(|| Node::new(node.id, node.endpoint.clone()));
 			entry.endpoint = node.endpoint;
 		}
 		for r in update.removed {
 			if !reserved.contains(&r) {
+				trace!(target: "network", "Removing entry 0x{:x} from NodeTable", r);
 				self.nodes.remove(&r);
 			}
 		}
@@ -385,7 +387,7 @@ impl NodeTable {
 			None => return,
 		};
 		if let Err(e) = fs::create_dir_all(&path) {
-			warn!("Error creating node table directory: {:?}", e);
+			warn!(target: "network", "Error creating node table directory: {:?}", e);
 			return;
 		}
 		path.push(NODES_FILE);
@@ -400,11 +402,11 @@ impl NodeTable {
 		match fs::File::create(&path) {
 			Ok(file) => {
 				if let Err(e) = serde_json::to_writer_pretty(file, &table) {
-					warn!("Error writing node table file: {:?}", e);
+					warn!(target: "network", "Error writing node table file: {:?}", e);
 				}
 			},
 			Err(e) => {
-				warn!("Error creating node table file: {:?}", e);
+				warn!(target: "network", "Error creating node table file: {:?}", e);
 			}
 		}
 	}
@@ -418,7 +420,7 @@ impl NodeTable {
 		let file = match fs::File::open(&path) {
 			Ok(file) => file,
 			Err(e) => {
-				debug!("Error opening node table file: {:?}", e);
+				debug!(target: "network", "Error opening node table file: {:?}", e);
 				return Default::default();
 			},
 		};
@@ -431,7 +433,7 @@ impl NodeTable {
 					.collect()
 			},
 			Err(e) => {
-				warn!("Error reading node table file: {:?}", e);
+				warn!(target: "network", "Error reading node table file: {:?}", e);
 				Default::default()
 			},
 		}
