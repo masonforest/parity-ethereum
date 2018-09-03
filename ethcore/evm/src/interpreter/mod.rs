@@ -187,6 +187,7 @@ pub struct Interpreter<Cost: CostType> {
 
 impl<Cost: CostType> vm::Vm for Interpreter<Cost> {
 	fn exec(&mut self, ext: &mut vm::Ext) -> vm::Result<GasLeft> {
+        trace!(target: "mason", "foo bar.");
 		loop {
 			let result = self.step(ext);
 			match result {

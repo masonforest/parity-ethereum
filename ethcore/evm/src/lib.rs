@@ -28,8 +28,10 @@ extern crate parity_bytes as bytes;
 #[macro_use]
 extern crate lazy_static;
 
-#[cfg_attr(feature = "evm-debug", macro_use)]
+#[macro_use]
 extern crate log;
+// #[cfg_attr(feature = "evm-debug", macro_use)]
+// extern crate log;
 
 #[cfg(test)]
 extern crate rustc_hex;
