@@ -16,7 +16,7 @@ tiny-keccak = "1.4"
 time = "0.1.34"
 itertools = "0.5"
 parking_lot = "0.6"
-parity-crypto = { git = "https://github.com/paritytech/parity-common" }
+parity-crypto = { git = "https://github.com/paritytech/parity-common", rev = "9e6725385b89b38f74c1a8ffc82abdd7fa25c304" }
 ethereum-types = "0.3"
 dir = { path = "../util/dir" }
 smallvec = "0.4"

@@ -12,4 +12,4 @@ syn = "0.13"
 quote = "0.5"
 
 [dev-dependencies]
-rlp = { git = "https://github.com/paritytech/parity-common" }
+rlp = { git = "https://github.com/paritytech/parity-common", rev = "9e6725385b89b38f74c1a8ffc82abdd7fa25c304" }

@@ -7,4 +7,4 @@ license = "GPL-3.0"
 
 [dependencies]
 ethereum-types = "0.3"
-plain_hasher = { git = "https://github.com/paritytech/parity-common" }
+plain_hasher = { git = "https://github.com/paritytech/parity-common", rev = "9e6725385b89b38f74c1a8ffc82abdd7fa25c304" }
